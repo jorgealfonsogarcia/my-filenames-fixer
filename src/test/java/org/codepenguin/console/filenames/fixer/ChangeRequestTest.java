@@ -25,21 +25,47 @@
 
 package org.codepenguin.console.filenames.fixer;
 
-import lombok.Builder;
-import lombok.Data;
+import org.junit.Test;
 
-/**
- * Register of a changed filename.
- *
- * @author Jorge Garcia
- * @version 1.0.0
- * @since 11
- */
-@Data
-@Builder
-class ChangeResult  {
-    private final boolean changed;
-    private final FileType fileType;
-    private final String oldCanonicalFilename;
-    private final String newCanonicalFilename;
+import java.io.File;
+
+import static org.junit.Assert.*;
+
+public class ChangeRequestTest {
+
+
+    private final String pathname = "pathname";
+    private final File file = new File(pathname);
+    private final boolean applyToHidden = false;
+    private final ChangeRequest.Options options = ChangeRequest.Options.builder().applyToHidden(applyToHidden).build();
+    private final ChangeRequest request = ChangeRequest.builder().file(file).options(options).build();
+
+    @Test
+    public void getFile() {
+        assertEquals(file, request.getFile());
+    }
+
+    @Test
+    public void getOptions() {
+    }
+
+    @Test
+    public void testEquals() {
+    }
+
+    @Test
+    public void canEqual() {
+    }
+
+    @Test
+    public void testHashCode() {
+    }
+
+    @Test
+    public void testToString() {
+    }
+
+    @Test
+    public void builder() {
+    }
 }

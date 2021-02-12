@@ -66,12 +66,14 @@ final class Fixer {
         try {
             currentCanonicalPath = file.getCanonicalPath();
         } catch (IOException e) {
-            results.add(ChangeResult.builder().changed(false).fileType(fileType).oldCanonicalFilename(currentFileName).build());
+            results.add(ChangeResult.builder().changed(false).fileType(fileType).oldCanonicalFilename(currentFileName)
+                    .build());
             return results;
         }
 
         if (!request.getOptions().isApplyToHidden() && file.isHidden()) {
-            results.add(ChangeResult.builder().changed(false).fileType(fileType).oldCanonicalFilename(currentCanonicalPath).build());
+            results.add(ChangeResult.builder().changed(false).fileType(fileType)
+                    .oldCanonicalFilename(currentCanonicalPath).build());
             return results;
         }
 
@@ -82,7 +84,8 @@ final class Fixer {
         try {
             newCanonicalFilename = parentFile.getCanonicalPath() + File.separator + newName;
         } catch (IOException e) {
-            results.add(ChangeResult.builder().changed(false).fileType(fileType).oldCanonicalFilename(currentCanonicalPath).build());
+            results.add(ChangeResult.builder().changed(false).fileType(fileType)
+                    .oldCanonicalFilename(currentCanonicalPath).build());
             return results;
         }
 
@@ -93,11 +96,11 @@ final class Fixer {
             } else {
                 FileUtils.moveFile(file, newFile);
             }
-            results.add(ChangeResult.builder().changed(true).fileType(fileType).oldCanonicalFilename(currentCanonicalPath)
-                    .newCanonicalFilename(newName).build());
+            results.add(ChangeResult.builder().changed(true).fileType(fileType)
+                    .oldCanonicalFilename(currentCanonicalPath).newCanonicalFilename(newName).build());
         } catch (IOException e) {
-            results.add(ChangeResult.builder().changed(false).fileType(fileType).oldCanonicalFilename(currentCanonicalPath)
-                    .newCanonicalFilename(newName).build());
+            results.add(ChangeResult.builder().changed(false).fileType(fileType)
+                    .oldCanonicalFilename(currentCanonicalPath).newCanonicalFilename(newName).build());
         }
 
         if (fileType.equals(DIR)) {

@@ -40,12 +40,14 @@ import java.io.File;
 @Data
 @Builder
 class ChangeRequest {
-    private File file;
-    private Options options;
+
+    private final File file;
+    private final Options options;
 
     @Data
     @Builder
     static class Options {
-        private boolean applyToHidden;
+
+        private final boolean applyToHidden;
     }
 }
