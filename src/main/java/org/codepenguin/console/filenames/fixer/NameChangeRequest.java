@@ -25,33 +25,12 @@
 
 package org.codepenguin.console.filenames.fixer;
 
-import org.apache.commons.io.FileUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-
-
-/**
- * Fixes the filenames.
- *
- * @author Jorge Garcia
- * @version 1.0.0
- * @since 11
- */
-final class Fixer {
-
-    /**
-     * Fixes the filename of the requested file and the inner files.
-     *
-     * @param request The change request.
-     * @return A collection with the change results.
-     */
-    Collection<ChangeResult> fix(final ChangeRequest request) {
-        return fix(request, new ArrayList<>());
-    }
-
-    private Collection<ChangeResult> fix(final ChangeRequest request, final List<ChangeResult> results) {
-        return null;
-    }
+@Data
+@AllArgsConstructor
+class NameChangeRequest {
+    private final String name;
+    private final Separator separator;
 }

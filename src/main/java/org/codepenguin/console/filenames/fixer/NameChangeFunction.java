@@ -25,33 +25,23 @@
 
 package org.codepenguin.console.filenames.fixer;
 
-import org.apache.commons.io.FileUtils;
+import java.util.function.Function;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import static java.lang.String.*;
+import static java.util.Locale.ROOT;
+import static org.apache.commons.lang3.StringUtils.*;
 
+class NameChangeFunction implements Function<NameChangeRequest, String> {
 
-/**
- * Fixes the filenames.
- *
- * @author Jorge Garcia
- * @version 1.0.0
- * @since 11
- */
-final class Fixer {
+    private static final String ALL_WHITESPACES_REGEX = "\\s+";
+    private static final String REPEATED_SEPARATOR_REGEX_FORMAT = "[%s]+";
 
-    /**
-     * Fixes the filename of the requested file and the inner files.
-     *
-     * @param request The change request.
-     * @return A collection with the change results.
-     */
-    Collection<ChangeResult> fix(final ChangeRequest request) {
-        return fix(request, new ArrayList<>());
+    @Override
+    public String apply(final NameChangeRequest request) {
+        final var separator = valueOf(request.getSeparator().getCharacter());
+        return join(SPACE, splitByCharacterTypeCamelCase(trim(request.getName()))).toLowerCase(ROOT)
+                .replaceAll(ALL_WHITESPACES_REGEX, separator)
+                .replaceAll(format(REPEATED_SEPARATOR_REGEX_FORMAT, separator), separator);
     }
 
-    private Collection<ChangeResult> fix(final ChangeRequest request, final List<ChangeResult> results) {
-        return null;
-    }
 }

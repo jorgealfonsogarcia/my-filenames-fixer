@@ -25,20 +25,16 @@
 
 package org.codepenguin.console.filenames.fixer;
 
-/**
- * File types.
- *
- * @author Jorge Garcia
- * @version 1.0.0
- * @since 11
- */
-enum FileType {
-    /**
-     * Directory.
-     */
-    DIR,
-    /**
-     * File.
-     */
-    FILE
+import lombok.Getter;
+
+@Getter
+enum Separator {
+    DASH('-'),
+    UNDERSCORE('_');
+
+    private final char character;
+
+    Separator(char character) {
+        this.character = character;
+    }
 }

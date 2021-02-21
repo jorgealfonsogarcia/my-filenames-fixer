@@ -25,33 +25,22 @@
 
 package org.codepenguin.console.filenames.fixer;
 
-import org.apache.commons.io.FileUtils;
+import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.util.Optional;
 
+import static org.junit.Assert.*;
 
-/**
- * Fixes the filenames.
- *
- * @author Jorge Garcia
- * @version 1.0.0
- * @since 11
- */
-final class Fixer {
+public class FilenameChangeFunctionTest {
 
-    /**
-     * Fixes the filename of the requested file and the inner files.
-     *
-     * @param request The change request.
-     * @return A collection with the change results.
-     */
-    Collection<ChangeResult> fix(final ChangeRequest request) {
-        return fix(request, new ArrayList<>());
-    }
+    private final FilenameChangeFunction function = new FilenameChangeFunction();
 
-    private Collection<ChangeResult> fix(final ChangeRequest request, final List<ChangeResult> results) {
-        return null;
+    @Test
+    public void name() {
+        File file = new File("C:\\tmp\\my_directory_abc_XXXXXX");
+        final var options = ChangeRequest.Options.builder().applyToHidden(false).build();
+        final var result = function.apply(new ChangeRequest(file, options));
+        assertNotNull(result);
     }
 }

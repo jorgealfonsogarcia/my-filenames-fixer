@@ -25,8 +25,11 @@
 
 package org.codepenguin.console.filenames.fixer;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import java.io.File;
+import java.util.Objects;
 
 /**
  * Register of a changed filename.
@@ -35,11 +38,41 @@ import lombok.Data;
  * @version 1.0.0
  * @since 11
  */
-@Data
-@Builder
-class ChangeResult  {
-    private final boolean changed;
-    private final FileType fileType;
-    private final String oldCanonicalFilename;
-    private final String newCanonicalFilename;
+
+@EqualsAndHashCode
+@ToString
+class ChangeResult {
+    private final ChangeRequest request;
+    private final File newFile;
+    private final ChangeError changeError;
+
+    ChangeResult(ChangeRequest request, File newFile) {
+        this(request, newFile, null);
+    }
+
+    ChangeResult(ChangeRequest request, ChangeError changeError) {
+        this(request, null, changeError);
+    }
+
+    private ChangeResult(ChangeRequest request, File newFile, ChangeError changeError) {
+        this.request = request;
+        this.newFile = newFile;
+        this.changeError = changeError;
+    }
+
+    boolean applied(){
+        return Objects.nonNull(newFile);
+    }
+
+    ChangeRequest getRequest() {
+        return request;
+    }
+
+    File getNewFile() {
+        return newFile;
+    }
+
+    ChangeError getChangeError() {
+        return changeError;
+    }
 }
