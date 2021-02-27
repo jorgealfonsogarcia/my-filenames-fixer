@@ -31,6 +31,13 @@ import static java.lang.String.*;
 import static java.util.Locale.ROOT;
 import static org.apache.commons.lang3.StringUtils.*;
 
+/**
+ * Function that applies the name change.
+ *
+ * @author Jorge Garcia
+ * @version 1.0.0
+ * @since 11
+ */
 class NameChangeFunction implements Function<NameChangeRequest, String> {
 
     private static final String ALL_WHITESPACES_REGEX = "\\s+";
@@ -38,7 +45,7 @@ class NameChangeFunction implements Function<NameChangeRequest, String> {
 
     @Override
     public String apply(final NameChangeRequest request) {
-        final var separator = valueOf(request.getSeparator().getCharacter());
+        final String separator = valueOf(request.getSeparator().getCharacter());
         return join(SPACE, splitByCharacterTypeCamelCase(trim(request.getName()))).toLowerCase(ROOT)
                 .replaceAll(ALL_WHITESPACES_REGEX, separator)
                 .replaceAll(format(REPEATED_SEPARATOR_REGEX_FORMAT, separator), separator);

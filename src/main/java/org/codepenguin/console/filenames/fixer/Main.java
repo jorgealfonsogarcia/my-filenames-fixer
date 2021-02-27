@@ -50,8 +50,8 @@ public final class Main {
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
-        final var filepath = args[INTEGER_ZERO];
-        final var options = ChangeRequest.Options.builder().applyToHidden(false).build();
+        final String filepath = args[INTEGER_ZERO];
+        final ChangeRequest.Options options = ChangeRequest.Options.builder().applyToHidden(false).build();
         new Fixer().fix(ChangeRequest.builder().file(new File(filepath)).options(options).build())
                 .forEach(result -> log.info(result.toString()));
     }

@@ -36,8 +36,8 @@ import static java.util.UUID.randomUUID;
 import static java.util.logging.Level.SEVERE;
 import static org.apache.commons.io.FileUtils.moveDirectory;
 import static org.apache.commons.io.FileUtils.moveFile;
-import static org.codepenguin.console.filenames.fixer.ChangeError.IO_EXCEPTION_MOVE_DIRECTORY;
-import static org.codepenguin.console.filenames.fixer.ChangeError.IO_EXCEPTION_MOVE_FILE;
+import static org.codepenguin.console.filenames.fixer.ChangeErrorType.IO_EXCEPTION_MOVE_DIRECTORY;
+import static org.codepenguin.console.filenames.fixer.ChangeErrorType.IO_EXCEPTION_MOVE_FILE;
 import static org.codepenguin.console.filenames.fixer.Separator.DASH;
 import static org.codepenguin.console.filenames.fixer.Separator.UNDERSCORE;
 
@@ -50,30 +50,31 @@ import static org.codepenguin.console.filenames.fixer.Separator.UNDERSCORE;
  * @since 11
  */
 @Log
-class FilenameChangeFunction implements Function<ChangeRequest, Optional<ChangeResult>> {
+class FilenameChangeFunction implements Function<ChangeRequest, Optional<ChangeResponse>> {
 
     private final NameChangeFunction function = new NameChangeFunction();
 
     @Override
-    public Optional<ChangeResult> apply(final ChangeRequest request) {
-        final var file = request.getFile();
+    public Optional<ChangeResponse> apply(final ChangeRequest request) {
+        final File file = request.getFile();
         if (!request.getOptions().isApplyToHidden() && file.isHidden()) {
             return Optional.empty();
         }
 
-        final var newFilename = function.apply(new NameChangeRequest(request.getFile().getName(),
+        final String filename = request.getFile().getName();
+        final String newFilename = function.apply(new NameChangeRequest(filename,
                 request.getFile().isDirectory() ? UNDERSCORE : DASH));
-        if (newFilename.equals(request.getFile().getName())) {
+        if (newFilename.equals(filename)) {
             return Optional.empty();
         }
 
-        final var mustUseTmpFile = newFilename.equalsIgnoreCase(request.getFile().getName());
+        final boolean mustUseTmpFile = newFilename.equalsIgnoreCase(filename);
 
-        final var newFile = request.getFile().toPath().resolveSibling(newFilename).toFile();
+        final File newFile = request.getFile().toPath().resolveSibling(newFilename).toFile();
         if (request.getFile().isDirectory()) {
             try {
                 if (mustUseTmpFile) {
-                    final var tmpFile = buildTmpFile(request.getFile());
+                    final File tmpFile = buildTmpFile(request.getFile());
                     moveDirectory(request.getFile(), tmpFile);
                     moveDirectory(tmpFile, newFile);
                 } else {
@@ -81,15 +82,15 @@ class FilenameChangeFunction implements Function<ChangeRequest, Optional<ChangeR
                 }
             } catch (IOException e) {
                 log.log(SEVERE, String.valueOf(request), e);
-                return Optional.of(new ChangeResult(request, IO_EXCEPTION_MOVE_DIRECTORY));
+                return Optional.of(new ChangeResponse(request, IO_EXCEPTION_MOVE_DIRECTORY, e.getMessage()));
             }
 
-            return Optional.of(new ChangeResult(request, newFile));
+            return Optional.of(new ChangeResponse(request, newFile));
         }
 
         try {
             if (mustUseTmpFile) {
-                final var tmpFile = buildTmpFile(request.getFile());
+                final File tmpFile = buildTmpFile(request.getFile());
                 moveFile(request.getFile(), tmpFile);
                 moveFile(tmpFile, newFile);
             } else {
@@ -97,10 +98,10 @@ class FilenameChangeFunction implements Function<ChangeRequest, Optional<ChangeR
             }
         } catch (IOException e) {
             log.log(SEVERE, String.valueOf(request), e);
-            return Optional.of(new ChangeResult(request, IO_EXCEPTION_MOVE_FILE));
+            return Optional.of(new ChangeResponse(request, IO_EXCEPTION_MOVE_FILE, e.getMessage()));
         }
 
-        return Optional.of(new ChangeResult(request, newFile));
+        return Optional.of(new ChangeResponse(request, newFile));
     }
 
     private File buildTmpFile(final File file) {

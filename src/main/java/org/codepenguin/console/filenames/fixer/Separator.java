@@ -27,6 +27,13 @@ package org.codepenguin.console.filenames.fixer;
 
 import lombok.Getter;
 
+/**
+ * Supported separators.
+ *
+ * @author Jorge Garcia
+ * @version 1.0.0
+ * @since 11
+ */
 @Getter
 enum Separator {
     DASH('-'),

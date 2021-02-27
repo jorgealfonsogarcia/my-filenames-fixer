@@ -25,54 +25,20 @@
 
 package org.codepenguin.console.filenames.fixer;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-import java.io.File;
-import java.util.Objects;
-
 /**
- * Register of a changed filename.
+ * Type of errors for the change process.
  *
  * @author Jorge Garcia
  * @version 1.0.0
  * @since 11
  */
-
-@EqualsAndHashCode
-@ToString
-class ChangeResult {
-    private final ChangeRequest request;
-    private final File newFile;
-    private final ChangeError changeError;
-
-    ChangeResult(ChangeRequest request, File newFile) {
-        this(request, newFile, null);
-    }
-
-    ChangeResult(ChangeRequest request, ChangeError changeError) {
-        this(request, null, changeError);
-    }
-
-    private ChangeResult(ChangeRequest request, File newFile, ChangeError changeError) {
-        this.request = request;
-        this.newFile = newFile;
-        this.changeError = changeError;
-    }
-
-    boolean applied(){
-        return Objects.nonNull(newFile);
-    }
-
-    ChangeRequest getRequest() {
-        return request;
-    }
-
-    File getNewFile() {
-        return newFile;
-    }
-
-    ChangeError getChangeError() {
-        return changeError;
-    }
+enum ChangeErrorType {
+    /**
+     * IO Exception for move directory process.
+     */
+    IO_EXCEPTION_MOVE_DIRECTORY,
+    /**
+     * IO Exception for move file process.
+     */
+    IO_EXCEPTION_MOVE_FILE
 }

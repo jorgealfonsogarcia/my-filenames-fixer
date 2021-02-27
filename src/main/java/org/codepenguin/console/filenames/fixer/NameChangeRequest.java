@@ -28,6 +28,13 @@ package org.codepenguin.console.filenames.fixer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+/**
+ * Request for a name change, with the separator to use for whitespace replacement.
+ *
+ * @author Jorge Garcia
+ * @version 1.0.0
+ * @since 11
+ */
 @Data
 @AllArgsConstructor
 class NameChangeRequest {

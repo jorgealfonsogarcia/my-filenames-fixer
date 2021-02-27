@@ -25,10 +25,6 @@
 
 package org.codepenguin.console.filenames.fixer;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 
@@ -47,11 +43,11 @@ final class Fixer {
      * @param request The change request.
      * @return A collection with the change results.
      */
-    Collection<ChangeResult> fix(final ChangeRequest request) {
+    Collection<ChangeResponse> fix(final ChangeRequest request) {
         return fix(request, new ArrayList<>());
     }
 
-    private Collection<ChangeResult> fix(final ChangeRequest request, final List<ChangeResult> results) {
+    private Collection<ChangeResponse> fix(final ChangeRequest request, final List<ChangeResponse> results) {
         return null;
     }
 }

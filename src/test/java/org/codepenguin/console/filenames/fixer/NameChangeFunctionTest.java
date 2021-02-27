@@ -32,6 +32,13 @@ import static org.codepenguin.console.filenames.fixer.Separator.DASH;
 import static org.codepenguin.console.filenames.fixer.Separator.UNDERSCORE;
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Unit test for {@link NameChangeFunction}.
+ *
+ * @author Jorge Garcia
+ * @version 1.0.0
+ * @since 11
+ */
 public class NameChangeFunctionTest {
 
     private final NameChangeFunction function = new NameChangeFunction();
