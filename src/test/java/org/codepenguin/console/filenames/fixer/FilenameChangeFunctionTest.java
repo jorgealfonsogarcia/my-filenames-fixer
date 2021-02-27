@@ -46,6 +46,7 @@ import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_TWO;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
 import static org.codepenguin.console.filenames.fixer.ChangeErrorType.IO_EXCEPTION_MOVE_DIRECTORY;
+import static org.codepenguin.console.filenames.fixer.ChangeErrorType.IO_EXCEPTION_MOVE_FILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -69,6 +70,7 @@ public class FilenameChangeFunctionTest {
 
     private static final String FUNCTION_FIELD_NAME = "function";
     private static final String MOVE_DIRECTORY_METHOD_NAME = "moveDirectory";
+    private static final String MOVE_FILE_METHOD_NAME = "moveFile";
 
     @Mock
     private NameChangeFunction nameChangeFunctionMock;
@@ -338,6 +340,196 @@ public class FilenameChangeFunctionTest {
         final ChangeResponse changeResponse = response.get();
         assertEquals(request, changeResponse.getRequest());
         assertEquals(IO_EXCEPTION_MOVE_DIRECTORY, changeResponse.getChangeErrorType());
+        assertEquals(exceptionMessage, changeResponse.getMessage());
+
+        assertNull(changeResponse.getNewFile());
+    }
+
+    // ---
+
+    @SneakyThrows
+    @Test
+    public void test7() {
+        final String oldFileName = "FILE-NAME";
+        final String newFileName = "file-name";
+
+        when(newFileMock.isHidden()).thenReturn(FALSE);
+        when(newFileMock.getName()).thenReturn(newFileName);
+        when(newFileMock.isDirectory()).thenReturn(FALSE);
+
+        when(newPathMock.toFile()).thenReturn(newFileMock);
+
+        when(pathMock.resolveSibling(anyString())).thenReturn(newPathMock);
+
+        when(fileMock.toPath()).thenReturn(pathMock);
+        when(fileMock.isHidden()).thenReturn(FALSE);
+        when(fileMock.getName()).thenReturn(oldFileName);
+        when(fileMock.isDirectory()).thenReturn(FALSE);
+
+        setInternalState(function, FUNCTION_FIELD_NAME, nameChangeFunctionMock);
+
+        when(nameChangeFunctionMock.apply(any(NameChangeRequest.class))).thenReturn(newFileName);
+
+        mockStatic(FileUtils.class);
+        doNothing().when(FileUtils.class, MOVE_FILE_METHOD_NAME, any(File.class), any(File.class));
+
+        final ChangeRequest.Options options = ChangeRequest.Options.builder().applyToHidden(false).build();
+        final ChangeRequest request = ChangeRequest.builder().file(fileMock).options(options).build();
+
+        final Optional<ChangeResponse> response = function.apply(request);
+
+        verify(newFileMock, times(INTEGER_ZERO)).isHidden();
+        verify(newFileMock, times(INTEGER_ZERO)).getName();
+        verify(newFileMock, times(INTEGER_ZERO)).isDirectory();
+
+        verify(newPathMock, times(INTEGER_TWO)).toFile();
+
+        verify(pathMock, times(INTEGER_TWO)).resolveSibling(anyString());
+
+        verify(fileMock, times(INTEGER_TWO)).toPath();
+        verify(fileMock, times(INTEGER_ONE)).isHidden();
+        verify(fileMock, times(INTEGER_ONE)).getName();
+        verify(fileMock, times(INTEGER_TWO)).isDirectory();
+
+        verify(nameChangeFunctionMock, times(INTEGER_ONE)).apply(any(NameChangeRequest.class));
+
+        verifyStatic(FileUtils.class, times(INTEGER_TWO));
+
+        assertNotNull(response);
+        assertTrue(response.isPresent());
+
+        final ChangeResponse changeResponse = response.get();
+        assertEquals(request, changeResponse.getRequest());
+        assertNull(changeResponse.getChangeErrorType());
+        assertNull(changeResponse.getMessage());
+
+        final File newFile = changeResponse.getNewFile();
+        assertNotNull(newFile);
+        assertFalse(newFile.isHidden());
+        assertEquals(newFileName, newFile.getName());
+        assertFalse(newFile.isDirectory());
+    }
+
+    @SneakyThrows
+    @Test
+    public void test8() {
+        final String oldFileName = "FILE NAME";
+        final String newFileName = "file-name";
+
+        when(newFileMock.isHidden()).thenReturn(FALSE);
+        when(newFileMock.getName()).thenReturn(newFileName);
+        when(newFileMock.isDirectory()).thenReturn(FALSE);
+
+        when(newPathMock.toFile()).thenReturn(newFileMock);
+
+        when(pathMock.resolveSibling(anyString())).thenReturn(newPathMock);
+
+        when(fileMock.toPath()).thenReturn(pathMock);
+        when(fileMock.isHidden()).thenReturn(FALSE);
+        when(fileMock.getName()).thenReturn(oldFileName);
+        when(fileMock.isDirectory()).thenReturn(FALSE);
+
+        setInternalState(function, FUNCTION_FIELD_NAME, nameChangeFunctionMock);
+
+        when(nameChangeFunctionMock.apply(any(NameChangeRequest.class))).thenReturn(newFileName);
+
+        mockStatic(FileUtils.class);
+        doNothing().when(FileUtils.class, MOVE_FILE_METHOD_NAME, any(File.class), any(File.class));
+
+        final ChangeRequest.Options options = ChangeRequest.Options.builder().applyToHidden(false).build();
+        final ChangeRequest request = ChangeRequest.builder().file(fileMock).options(options).build();
+
+        final Optional<ChangeResponse> response = function.apply(request);
+
+        verify(newFileMock, times(INTEGER_ZERO)).isHidden();
+        verify(newFileMock, times(INTEGER_ZERO)).getName();
+        verify(newFileMock, times(INTEGER_ZERO)).isDirectory();
+
+        verify(newPathMock, times(INTEGER_ONE)).toFile();
+
+        verify(pathMock, times(INTEGER_ONE)).resolveSibling(anyString());
+
+        verify(fileMock, times(INTEGER_ONE)).toPath();
+        verify(fileMock, times(INTEGER_ONE)).isHidden();
+        verify(fileMock, times(INTEGER_ONE)).getName();
+        verify(fileMock, times(INTEGER_TWO)).isDirectory();
+
+        verify(nameChangeFunctionMock, times(INTEGER_ONE)).apply(any(NameChangeRequest.class));
+
+        verifyStatic(FileUtils.class, times(INTEGER_TWO));
+
+        assertNotNull(response);
+        assertTrue(response.isPresent());
+
+        final ChangeResponse changeResponse = response.get();
+        assertEquals(request, changeResponse.getRequest());
+        assertNull(changeResponse.getChangeErrorType());
+        assertNull(changeResponse.getMessage());
+
+        final File newFile = changeResponse.getNewFile();
+        assertNotNull(newFile);
+        assertFalse(newFile.isHidden());
+        assertEquals(newFileName, newFile.getName());
+        assertFalse(newFile.isDirectory());
+    }
+
+    @SneakyThrows
+    @Test
+    public void test9() {
+        final String oldFileName = "FILE NAME";
+        final String newFileName = "file-name";
+
+        when(newFileMock.isHidden()).thenReturn(FALSE);
+        when(newFileMock.getName()).thenReturn(newFileName);
+        when(newFileMock.isDirectory()).thenReturn(FALSE);
+
+        when(newPathMock.toFile()).thenReturn(newFileMock);
+
+        when(pathMock.resolveSibling(anyString())).thenReturn(newPathMock);
+
+        when(fileMock.toPath()).thenReturn(pathMock);
+        when(fileMock.isHidden()).thenReturn(FALSE);
+        when(fileMock.getName()).thenReturn(oldFileName);
+        when(fileMock.isDirectory()).thenReturn(FALSE);
+
+        setInternalState(function, FUNCTION_FIELD_NAME, nameChangeFunctionMock);
+
+        when(nameChangeFunctionMock.apply(any(NameChangeRequest.class))).thenReturn(newFileName);
+
+        mockStatic(FileUtils.class);
+
+        final String exceptionMessage = "IOException message";
+        doThrow(new IOException(exceptionMessage))
+                .when(FileUtils.class, MOVE_FILE_METHOD_NAME, any(File.class), any(File.class));
+
+        final ChangeRequest.Options options = ChangeRequest.Options.builder().applyToHidden(false).build();
+        final ChangeRequest request = ChangeRequest.builder().file(fileMock).options(options).build();
+
+        final Optional<ChangeResponse> response = function.apply(request);
+
+        verify(newFileMock, times(INTEGER_ZERO)).isHidden();
+        verify(newFileMock, times(INTEGER_ZERO)).getName();
+        verify(newFileMock, times(INTEGER_ZERO)).isDirectory();
+
+        verify(newPathMock, times(INTEGER_ONE)).toFile();
+
+        verify(pathMock, times(INTEGER_ONE)).resolveSibling(anyString());
+
+        verify(fileMock, times(INTEGER_ONE)).toPath();
+        verify(fileMock, times(INTEGER_ONE)).isHidden();
+        verify(fileMock, times(INTEGER_ONE)).getName();
+        verify(fileMock, times(INTEGER_TWO)).isDirectory();
+
+        verify(nameChangeFunctionMock, times(INTEGER_ONE)).apply(any(NameChangeRequest.class));
+
+        verifyStatic(FileUtils.class, times(INTEGER_TWO));
+
+        assertNotNull(response);
+        assertTrue(response.isPresent());
+
+        final ChangeResponse changeResponse = response.get();
+        assertEquals(request, changeResponse.getRequest());
+        assertEquals(IO_EXCEPTION_MOVE_FILE, changeResponse.getChangeErrorType());
         assertEquals(exceptionMessage, changeResponse.getMessage());
 
         assertNull(changeResponse.getNewFile());
