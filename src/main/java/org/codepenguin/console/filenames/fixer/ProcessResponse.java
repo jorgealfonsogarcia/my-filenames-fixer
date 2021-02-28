@@ -25,52 +25,34 @@
 
 package org.codepenguin.console.filenames.fixer;
 
-import lombok.extern.java.Log;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import java.util.Collection;
 import java.util.Optional;
 
-import static java.util.logging.Level.INFO;
+import static lombok.AccessLevel.PACKAGE;
 
 /**
- * Main class.
+ * Response for any process. Indicates if the process was successful or not, and a message about the result.
  *
+ * @param <T> Type of the response.
  * @author Jorge Garcia
  * @version 1.0.0
  * @since 1.8
  */
-@Log
-public final class Main {
+@AllArgsConstructor
+class ProcessResponse<T> {
+    @Getter(PACKAGE)
+    private final boolean successful;
+    @Getter(PACKAGE)
+    private final String message;
+    private final T response;
 
-    private static final String NO_CHANGE_REQUEST_MSG = "There isn't a change request built. Please check the " +
-            "arguments or execute the application with debug level.";
-
-    private Main() {
+    ProcessResponse(boolean successful, String message) {
+        this(successful, message, null);
     }
 
-    /**
-     * Main method.
-     *
-     * @param args Command-line arguments.
-     */
-    public static void main(String[] args) {
-        final ProcessResponse<ChangeRequest> processResponse = new BuildChangeRequestFunction().apply(args);
-        if (!processResponse.isSuccessful()) {
-            log.log(INFO, processResponse.getMessage());
-            return;
-        }
-
-        final Optional<ChangeRequest> changeRequest = processResponse.getResponse();
-        if (!changeRequest.isPresent()) {
-            log.log(INFO, NO_CHANGE_REQUEST_MSG);
-            return;
-        }
-
-        final Collection<ChangeResponse> changeResponses = new Fixer().fix(changeRequest.get());
-        if (changeResponses.isEmpty()) {
-            return;
-        }
-
-        changeResponses.forEach(changeResponse -> log.log(INFO, String.valueOf(changeResponse)));
+    Optional<T> getResponse() {
+        return Optional.ofNullable(response);
     }
 }

@@ -98,7 +98,7 @@ public class FilenameChangeFunctionTest {
     public void test1() {
         when(fileMock.isHidden()).thenReturn(TRUE);
 
-        final ChangeRequest.Options options = ChangeRequest.Options.builder().applyToHidden(false).build();
+        final ChangeRequestOptions options = ChangeRequestOptions.builder().applyToHidden(false).build();
         final ChangeRequest request = ChangeRequest.builder().file(fileMock).options(options).build();
 
         final Optional<ChangeResponse> response = function.apply(request);
@@ -118,7 +118,7 @@ public class FilenameChangeFunctionTest {
         setInternalState(function, FUNCTION_FIELD_NAME, nameChangeFunctionMock);
         when(nameChangeFunctionMock.apply(any(NameChangeRequest.class))).thenReturn("dir_name");
 
-        final ChangeRequest.Options options = ChangeRequest.Options.builder().applyToHidden(false).build();
+        final ChangeRequestOptions options = ChangeRequestOptions.builder().applyToHidden(false).build();
         final ChangeRequest request = ChangeRequest.builder().file(fileMock).options(options).build();
 
         final Optional<ChangeResponse> response = function.apply(request);
@@ -142,7 +142,7 @@ public class FilenameChangeFunctionTest {
         setInternalState(function, FUNCTION_FIELD_NAME, nameChangeFunctionMock);
         when(nameChangeFunctionMock.apply(any(NameChangeRequest.class))).thenReturn(".file-name");
 
-        final ChangeRequest.Options options = ChangeRequest.Options.builder().applyToHidden(true).build();
+        final ChangeRequestOptions options = ChangeRequestOptions.builder().applyToHidden(true).build();
         final ChangeRequest request = ChangeRequest.builder().file(fileMock).options(options).build();
 
         final Optional<ChangeResponse> response = function.apply(request);
@@ -183,7 +183,7 @@ public class FilenameChangeFunctionTest {
         mockStatic(FileUtils.class);
         doNothing().when(FileUtils.class, MOVE_DIRECTORY_METHOD_NAME, any(File.class), any(File.class));
 
-        final ChangeRequest.Options options = ChangeRequest.Options.builder().applyToHidden(false).build();
+        final ChangeRequestOptions options = ChangeRequestOptions.builder().applyToHidden(false).build();
         final ChangeRequest request = ChangeRequest.builder().file(fileMock).options(options).build();
 
         final Optional<ChangeResponse> response = function.apply(request);
@@ -246,7 +246,7 @@ public class FilenameChangeFunctionTest {
         mockStatic(FileUtils.class);
         doNothing().when(FileUtils.class, MOVE_DIRECTORY_METHOD_NAME, any(File.class), any(File.class));
 
-        final ChangeRequest.Options options = ChangeRequest.Options.builder().applyToHidden(false).build();
+        final ChangeRequestOptions options = ChangeRequestOptions.builder().applyToHidden(false).build();
         final ChangeRequest request = ChangeRequest.builder().file(fileMock).options(options).build();
 
         final Optional<ChangeResponse> response = function.apply(request);
@@ -312,7 +312,7 @@ public class FilenameChangeFunctionTest {
         doThrow(new IOException(exceptionMessage))
                 .when(FileUtils.class, MOVE_DIRECTORY_METHOD_NAME, any(File.class), any(File.class));
 
-        final ChangeRequest.Options options = ChangeRequest.Options.builder().applyToHidden(false).build();
+        final ChangeRequestOptions options = ChangeRequestOptions.builder().applyToHidden(false).build();
         final ChangeRequest request = ChangeRequest.builder().file(fileMock).options(options).build();
 
         final Optional<ChangeResponse> response = function.apply(request);
@@ -373,7 +373,7 @@ public class FilenameChangeFunctionTest {
         mockStatic(FileUtils.class);
         doNothing().when(FileUtils.class, MOVE_FILE_METHOD_NAME, any(File.class), any(File.class));
 
-        final ChangeRequest.Options options = ChangeRequest.Options.builder().applyToHidden(false).build();
+        final ChangeRequestOptions options = ChangeRequestOptions.builder().applyToHidden(false).build();
         final ChangeRequest request = ChangeRequest.builder().file(fileMock).options(options).build();
 
         final Optional<ChangeResponse> response = function.apply(request);
@@ -436,7 +436,7 @@ public class FilenameChangeFunctionTest {
         mockStatic(FileUtils.class);
         doNothing().when(FileUtils.class, MOVE_FILE_METHOD_NAME, any(File.class), any(File.class));
 
-        final ChangeRequest.Options options = ChangeRequest.Options.builder().applyToHidden(false).build();
+        final ChangeRequestOptions options = ChangeRequestOptions.builder().applyToHidden(false).build();
         final ChangeRequest request = ChangeRequest.builder().file(fileMock).options(options).build();
 
         final Optional<ChangeResponse> response = function.apply(request);
@@ -502,7 +502,7 @@ public class FilenameChangeFunctionTest {
         doThrow(new IOException(exceptionMessage))
                 .when(FileUtils.class, MOVE_FILE_METHOD_NAME, any(File.class), any(File.class));
 
-        final ChangeRequest.Options options = ChangeRequest.Options.builder().applyToHidden(false).build();
+        final ChangeRequestOptions options = ChangeRequestOptions.builder().applyToHidden(false).build();
         final ChangeRequest request = ChangeRequest.builder().file(fileMock).options(options).build();
 
         final Optional<ChangeResponse> response = function.apply(request);

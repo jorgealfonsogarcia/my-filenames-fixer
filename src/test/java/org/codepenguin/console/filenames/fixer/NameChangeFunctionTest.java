@@ -37,7 +37,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Jorge Garcia
  * @version 1.0.0
- * @since 11
+ * @since 1.8
  */
 public class NameChangeFunctionTest {
 

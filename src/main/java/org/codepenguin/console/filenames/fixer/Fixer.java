@@ -33,7 +33,7 @@ import java.util.*;
  *
  * @author Jorge Garcia
  * @version 1.0.0
- * @since 11
+ * @since 1.8
  */
 final class Fixer {
 

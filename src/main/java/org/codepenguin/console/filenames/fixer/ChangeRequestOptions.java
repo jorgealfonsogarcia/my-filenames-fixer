@@ -25,22 +25,13 @@
 
 package org.codepenguin.console.filenames.fixer;
 
+
 import lombok.Builder;
 import lombok.Data;
 
-import java.io.File;
-
-/**
- * Request to apply the filename changes.
- *
- * @author Jorge Garcia
- * @version 1.0.0
- * @since 1.8
- */
 @Data
 @Builder
-class ChangeRequest {
+class ChangeRequestOptions {
 
-    private final File file;
-    private final ChangeRequestOptions options;
+    private final boolean applyToHidden;
 }
